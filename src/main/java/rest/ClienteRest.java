@@ -62,11 +62,4 @@ public class ClienteRest {
     public Cliente modificarCliente(Cliente cliente) {
         return clienteManager.modificarCliente(cliente);
     }
-
-
-
-
-
-
-
 }
