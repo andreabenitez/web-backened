@@ -11,10 +11,8 @@ import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 
 /**
- *
- * @author User
+ * Created by andrea on 27/02/16.
  */
-
 @XmlRootElement
 public class Producto implements Serializable {
     private static final long serialVersionUID = 1L;

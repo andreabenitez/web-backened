@@ -9,8 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 /**
- *
- * @author User
+ * Created by andrea on 27/02/16.
  */
 @XmlRootElement
 public class Cliente implements Serializable {
@@ -29,11 +28,12 @@ public class Cliente implements Serializable {
         this.id = id;
     }
 
-    public Cliente(Integer id, String apellidos, String cedula, String nombre) {
+    public Cliente(Integer id, String apellidos, String nombre, String cedula,  String email) {
         this.id = id;
         this.apellidos = apellidos;
         this.cedula = cedula;
         this.nombre = nombre;
+        this.email = email;
     }
 
     public String getApellidos() {

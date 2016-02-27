@@ -10,10 +10,8 @@ import java.io.Serializable;
 
 
 /**
- *
- * @author User
+ * Created by andrea on 27/02/16.
  */
-
 public class Proveedor implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer id;
