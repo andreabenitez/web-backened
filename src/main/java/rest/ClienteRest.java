@@ -1,6 +1,5 @@
 package rest;
 
-import ejb.ClienteManager;
 import modelos.Cliente;
 
 import javax.ejb.EJB;
@@ -8,25 +7,30 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by andrea on 27/02/16.
  */
-@Path("clientes")
+@Path("/clientes")
 public class ClienteRest {
 
-    @EJB
-    ClienteManager clienteManager;
+    private static List<Cliente> clientes = new ArrayList<Cliente>();
 
     /**
-     * Lista todo los clientes
+     * Lista todos los clientes
      * @return List<Cliente>
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Cliente> listarClientes() {
-        return clienteManager.listarClientes();
+
+        clientes.add(new Cliente(1, "Benitez", "Andrea", "3969499", "andy.benitez09@gmail.com" ));
+        clientes.add(new Cliente(2, "Quinonez", "Franciso", "3969500", "franqur17@gmail.com" ));
+        clientes.add(new Cliente(3, "Laviosa", "Sonia", "3969501", "sonia.laviosa@gmail.com" ));
+
+        return clientes;
     }
 
     /**
@@ -37,7 +41,8 @@ public class ClienteRest {
     @POST
     @Consumes("application/json")
     public Cliente crearCliente(Cliente cliente) {
-        return clienteManager.crearCliente(cliente);
+        clientes.add(cliente);
+        return cliente;
     }
 
     /**
@@ -47,19 +52,33 @@ public class ClienteRest {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("{id}")
+    @Path("/{id}")
     public Cliente buscarCliente(@PathParam("id") Integer id) {
-        return clienteManager.buscarClienteConId(id);
+
+        for (Cliente cliente : clientes){
+            if (id.equals(cliente.getId())){
+                return cliente;
+            }
+        }
+        return null;
     }
 
     /**
      * Modifica un cliente
-     * @param cliente
+     * @param clienteModificado
      * @return
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public Cliente modificarCliente(Cliente cliente) {
-        return clienteManager.modificarCliente(cliente);
+    public Cliente modificarCliente(Cliente clienteModificado) {
+
+        for(Cliente cliente : clientes){
+            if (cliente.getId().equals(clienteModificado.getId())){
+                clientes.remove(cliente);
+                clientes.add(clienteModificado);
+                return clienteModificado;
+            }
+        }
+        return  null;
     }
 }
