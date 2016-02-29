@@ -19,9 +19,9 @@ public class Producto implements Serializable {
     private Integer id;
     private String nombre;
     private Integer cantidad;
-    private int precioUnitario;
+    private Integer precioUnitario;
     private String descripcion;
-    private Proveedor idProveedor;
+    private Proveedor proveedor;
 
 
 
@@ -30,6 +30,15 @@ public class Producto implements Serializable {
 
     public Producto(Integer id) {
         this.id = id;
+    }
+
+    public Producto(Integer id, String nombre, Integer cantidad, Integer precioUnitario, String descripcion, Proveedor proveedor) {
+        this.id = id;
+        this.nombre = nombre;
+        this.cantidad = cantidad;
+        this.precioUnitario = precioUnitario;
+        this.descripcion = descripcion;
+        this.proveedor = proveedor;
     }
 
     public Producto(Integer id, String nombre, int precioUnitario) {
@@ -62,11 +71,11 @@ public class Producto implements Serializable {
         this.cantidad = cantidad;
     }
 
-    public int getPrecioUnitario() {
+    public Integer getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(int precioUnitario) {
+    public void setPrecioUnitario(Integer precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 
@@ -78,19 +87,11 @@ public class Producto implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Proveedor getIdProveedor() {
-        return idProveedor;
+    public Proveedor getProveedor() {
+        return proveedor;
     }
 
-    public void setIdProveedor(Proveedor idProveedor) {
-        this.idProveedor = idProveedor;
+    public void setProveedor(Proveedor proveedor) {
+        this.proveedor = proveedor;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
 }

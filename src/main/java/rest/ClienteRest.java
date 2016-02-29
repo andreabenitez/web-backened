@@ -1,13 +1,11 @@
 package rest;
 
 import modelos.Cliente;
+import servicios.ClienteServicios;
 
-import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
@@ -15,8 +13,7 @@ import java.util.List;
  */
 @Path("/clientes")
 public class ClienteRest {
-
-    private static List<Cliente> clientes = new ArrayList<Cliente>();
+    
 
     /**
      * Lista todos los clientes
@@ -25,12 +22,7 @@ public class ClienteRest {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Cliente> listarClientes() {
-
-        clientes.add(new Cliente(1, "Benitez", "Andrea", "3969499", "andy.benitez09@gmail.com" ));
-        clientes.add(new Cliente(2, "Quinonez", "Franciso", "3969500", "franqur17@gmail.com" ));
-        clientes.add(new Cliente(3, "Laviosa", "Sonia", "3969501", "sonia.laviosa@gmail.com" ));
-
-        return clientes;
+        return ClienteServicios.getClientes();
     }
 
     /**
@@ -41,7 +33,7 @@ public class ClienteRest {
     @POST
     @Consumes("application/json")
     public Cliente crearCliente(Cliente cliente) {
-        clientes.add(cliente);
+        ClienteServicios.agregarCliente(cliente);
         return cliente;
     }
 
@@ -54,13 +46,7 @@ public class ClienteRest {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public Cliente buscarCliente(@PathParam("id") Integer id) {
-
-        for (Cliente cliente : clientes){
-            if (id.equals(cliente.getId())){
-                return cliente;
-            }
-        }
-        return null;
+        return ClienteServicios.buscarCliente(id);
     }
 
     /**
@@ -70,15 +56,23 @@ public class ClienteRest {
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Cliente modificarCliente(Cliente clienteModificado) {
-
-        for(Cliente cliente : clientes){
-            if (cliente.getId().equals(clienteModificado.getId())){
-                clientes.remove(cliente);
-                clientes.add(clienteModificado);
-                return clienteModificado;
-            }
-        }
-        return  null;
+        ClienteServicios.modificarCliente(clienteModificado);
+        return clienteModificado;
     }
+
+    /**
+     * Eliminar cliente
+     * @param id
+     * @return
+     */
+    @DELETE
+    @Path("{id}")
+    public Response eliminarCliente(@PathParam("id") Integer id) {
+        ClienteServicios.eliminarCliente(id);
+        return Response.status(200).build();
+    }
+
+
 }
