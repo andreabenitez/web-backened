@@ -1,6 +1,7 @@
 package servicios;
 
 
+import modelos.Producto;
 import modelos.Proveedor;
 
 import java.util.ArrayList;
@@ -33,11 +34,19 @@ public class ProveedorServicios {
     }
 
     public static void eliminarProveedor(Integer proveedorId){
+        List<Producto> productoList = ProductoServicios.getProductos();
+        Proveedor proveedor = proveedores.get(proveedorId);
+        for (Producto producto : productoList){
+            if (producto.getProveedor().equals(proveedor)){
+                producto.setProveedor(null);
+            }
+        }
         proveedores.remove(proveedorId);
     }
 
 
     public static Proveedor buscarProveedor(Integer proveedorId){
+
         return proveedores.get(proveedorId);
     }
 
