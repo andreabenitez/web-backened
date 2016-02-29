@@ -19,7 +19,7 @@ public class Producto implements Serializable {
     private Integer id;
     private String nombre;
     private Integer cantidad;
-    private Integer precioUnitario;
+    private Float precioUnitario;
     private String descripcion;
     private Proveedor proveedor;
 
@@ -32,7 +32,7 @@ public class Producto implements Serializable {
         this.id = id;
     }
 
-    public Producto(Integer id, String nombre, Integer cantidad, Integer precioUnitario, String descripcion, Proveedor proveedor) {
+    public Producto(Integer id, String nombre, Integer cantidad, Float precioUnitario, String descripcion, Proveedor proveedor) {
         this.id = id;
         this.nombre = nombre;
         this.cantidad = cantidad;
@@ -41,7 +41,7 @@ public class Producto implements Serializable {
         this.proveedor = proveedor;
     }
 
-    public Producto(Integer id, String nombre, int precioUnitario) {
+    public Producto(Integer id, String nombre, Float precioUnitario) {
         this.id = id;
         this.nombre = nombre;
         this.precioUnitario = precioUnitario;
@@ -71,11 +71,11 @@ public class Producto implements Serializable {
         this.cantidad = cantidad;
     }
 
-    public Integer getPrecioUnitario() {
+    public Float getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(Integer precioUnitario) {
+    public void setPrecioUnitario(Float precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 
@@ -93,5 +93,17 @@ public class Producto implements Serializable {
 
     public void setProveedor(Proveedor proveedor) {
         this.proveedor = proveedor;
+    }
+
+    @Override
+    public String toString() {
+        return "Producto{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", cantidad=" + cantidad +
+                ", precioUnitario=" + precioUnitario +
+                ", descripcion='" + descripcion + '\'' +
+                ", proveedor=" + proveedor.toString() +
+                '}';
     }
 }

@@ -72,4 +72,6 @@ public class ProveedorRest {
         ProveedorServicios.eliminarProveedor(id);
         return Response.status(200).build();
     }
+
+
 }

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class ClienteServicios {
 
-    private static HashMap<Integer, Cliente> clientes = new HashMap<>(); ;
+    private static HashMap<Integer, Cliente> clientes = new HashMap<>();
     private static int id =0;
 
 
