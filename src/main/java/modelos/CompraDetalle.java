@@ -2,10 +2,12 @@ package modelos;
 
 import servicios.ProductoServicios;
 
+import java.io.Serializable;
+
 /**
  * Created by andrea on 29/02/16.
  */
-public class CompraDetalle {
+public class CompraDetalle implements Serializable {
     private Integer id;
     private Integer idProducto;
     private Integer cantidad;

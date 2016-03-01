@@ -1,11 +1,12 @@
 package modelos;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by andrea on 29/02/16.
  */
-public class Compra {
+public class Compra implements Serializable {
     private Integer id;
     private String date;
     private Float total;
