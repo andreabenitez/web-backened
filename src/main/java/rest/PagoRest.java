@@ -27,7 +27,8 @@ public class PagoRest {
 
     @POST
     @Consumes("application/json")
-    public Response crearPago(Pago pago) {
+    public Response crearPago(Pago pago)
+    {
         return PagoServicios.agregarPago(pago);
     }
 

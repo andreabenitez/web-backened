@@ -12,6 +12,7 @@ public class Venta {
     private Float total;
     private Cliente cliente;
     List<VentaDetalle> ventaDetalles;
+    private Float saldoDeuda;
 
     public Integer getId() {
         return id;
@@ -51,6 +52,14 @@ public class Venta {
 
     public void setVentaDetalles(List<VentaDetalle> ventaDetalles) {
         this.ventaDetalles = ventaDetalles;
+    }
+
+    public Float getSaldoDeuda() {
+        return saldoDeuda;
+    }
+
+    public void setSaldoDeuda(Float saldoDeuda) {
+        this.saldoDeuda = saldoDeuda;
     }
 
     @Override

@@ -28,6 +28,6 @@ public class ApplicationConfig extends Application {
 
     public Set<Class<?>> getClasses() {
         return new HashSet<Class<?>>(Arrays.asList(ClienteRest.class,
-                ProveedorRest.class, ProductoRest.class, CompraRest.class, VentaRest.class));
+                ProveedorRest.class, ProductoRest.class, CompraRest.class, VentaRest.class, PagoRest.class));
     }
 }

@@ -49,7 +49,16 @@ public class VentaServicios {
 
 
         venta.setTotal(total);
+        venta.setSaldoDeuda(total);
         ventas.put(idVenta, venta);
         return Response.status(200).entity(venta.toString()).build();
+    }
+
+    public static void modificarVenta(Venta venta){
+        ventas.put(venta.getId(), venta);
+    }
+
+    public static Venta buscarVentaPorId (Integer idVenta){
+        return ventas.get(idVenta);
     }
 }

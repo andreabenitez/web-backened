@@ -1,14 +1,12 @@
 package modelos;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class Pago implements Serializable {
 
 	private Integer id;
-	private Cliente cliente;
-	private Venta venta;
-	private Float monto;
+	private Integer ventaId;
+	private Float montoPagado;
 	private String fecha;
 
 
@@ -20,29 +18,15 @@ public class Pago implements Serializable {
 		this.id = id;
 	}
 
-	public Cliente getCliente() {
-		return cliente;
+
+	public Integer getVentaId() {
+		return ventaId;
 	}
 
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+	public void setVentaId(Integer ventaId) {
+		this.ventaId = ventaId;
 	}
 
-	public Venta getVenta() {
-		return venta;
-	}
-
-	public void setVenta(Venta venta) {
-		this.venta = venta;
-	}
-
-	public Float getMonto() {
-		return monto;
-	}
-
-	public void setMonto(Float monto) {
-		this.monto = monto;
-	}
 
 	public String getFecha() {
 		return fecha;
@@ -51,4 +35,13 @@ public class Pago implements Serializable {
 	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
+
+	public Float getMontoPagado() {
+		return montoPagado;
+	}
+
+	public void setMontoPagado(Float montoPagado) {
+		this.montoPagado = montoPagado;
+	}
+
 }
