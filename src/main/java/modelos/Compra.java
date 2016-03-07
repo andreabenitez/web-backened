@@ -33,6 +33,7 @@ public class Compra implements Serializable {
     @Column(name = "total")
     private Float total;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "id_proveedor", referencedColumnName = "id_proveedor")
     private Proveedor proveedor;
@@ -80,18 +81,4 @@ public class Compra implements Serializable {
         this.compraDetalles = compraDetalles;
     }
 
-    @Override
-    public String toString() {
-        String result =  "Compra{" +
-                "id=" + idCompra +
-                ", date='" + date + '\'' +
-                ", total=" + total +
-                ", proveedor=" + proveedor.toString() +
-                ", compraDetalles={" ;
-        for (CompraDetalle compraDetalle : compraDetalles){
-            result = result + compraDetalle.toString();
-        }
-        result = result + '}';
-        return  result;
-    }
 }

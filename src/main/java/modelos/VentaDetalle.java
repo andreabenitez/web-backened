@@ -26,6 +26,7 @@ public class VentaDetalle implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idVentaDetalle;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
     private Producto producto;
@@ -66,12 +67,4 @@ public class VentaDetalle implements Serializable{
         this.venta = venta;
     }
 
-    @Override
-    public String toString() {
-        return "VentaDetalle{" +
-                "idVentaDetalle=" + idVentaDetalle +
-                ", idProducto=" + producto +
-                ", cantidad=" + cantidad +
-                '}';
-    }
 }

@@ -94,14 +94,5 @@ public class Cliente implements Serializable {
         this.email = email;
     }
 
-    @Override
-    public String toString() {
-        return "Cliente{" +
-                "id=" + idCliente +
-                ", nombre='" + nombre + '\'' +
-                ", apellidos='" + apellidos + '\'' +
-                ", cedula='" + cedula + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
+
 }

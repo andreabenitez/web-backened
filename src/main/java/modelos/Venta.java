@@ -34,6 +34,7 @@ public class Venta implements Serializable {
     @Column(name = "total")
     private Float total;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "id_cliente", referencedColumnName = "id_cliente")
     private Cliente cliente;
@@ -93,19 +94,5 @@ public class Venta implements Serializable {
         this.saldoDeuda = saldoDeuda;
     }
 
-    @Override
-    public String toString() {
-        String result = "Venta{" +
-                "idVenta=" + idVenta +
-                ", date='" + date + '\'' +
-                ", total=" + total +
-                ", cliente=" + cliente.toString() +
-                ", ventaDetalles= {";
 
-        for (VentaDetalle ventaDetalle : ventaDetalles){
-            result = result + ventaDetalle.toString();
-        }
-        result = result +   '}';
-        return result;
-    }
 }

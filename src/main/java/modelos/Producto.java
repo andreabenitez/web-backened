@@ -46,6 +46,7 @@ public class Producto implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "id_proveedor", referencedColumnName = "id_proveedor")
     private Proveedor proveedor;
@@ -120,15 +121,5 @@ public class Producto implements Serializable {
         this.proveedor = proveedor;
     }
 
-    @Override
-    public String toString() {
-        return "Producto{" +
-                "id=" + idProducto +
-                ", nombre='" + nombre + '\'' +
-                ", cantidad=" + cantidad +
-                ", precioUnitario=" + precioUnitario +
-                ", descripcion='" + descripcion + '\'' +
-                ", proveedor=" + proveedor.toString() +
-                '}';
-    }
+
 }

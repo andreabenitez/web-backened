@@ -5,6 +5,8 @@ import modelos.Producto;
 import modelos.Proveedor;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -38,9 +40,9 @@ public class ProveedorServicios {
         return "El proveedor que intenta eliminar no existe";
     }
 
-
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public  Proveedor buscarProveedor(Integer proveedorId){
-        return entityManager.find(Proveedor.class,proveedorId);
+        return entityManager.find(Proveedor.class, proveedorId);
     }
 
     public Proveedor modificarProveedor(Proveedor proveedor){

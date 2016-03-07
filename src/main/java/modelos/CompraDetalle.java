@@ -34,6 +34,7 @@ public class CompraDetalle implements Serializable {
     @Column(name = "cantidad")
     private Integer cantidad;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "id_compra", referencedColumnName = "id_compra")
     private Compra compra;
@@ -66,12 +67,4 @@ public class CompraDetalle implements Serializable {
         this.cantidad = cantidad;
     }
 
-    @Override
-    public String toString() {
-        return "CompraDetalle{" +
-                "id=" + idCompraDetalle +
-                ", producto=" + producto +
-                ", cantidad=" + cantidad +
-                '}';
-    }
 }

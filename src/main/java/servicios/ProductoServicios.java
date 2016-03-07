@@ -2,9 +2,13 @@ package servicios;
 
 import modelos.Cliente;
 import modelos.Producto;
+import modelos.Proveedor;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -20,12 +24,17 @@ public class ProductoServicios {
     @PersistenceContext(unitName = "persistenciaApp")
     private EntityManager entityManager;
 
+    @Inject
+    private ProveedorServicios proveedorServicios;
+
     public  List<Producto> getProductos() {
         Query query = entityManager.createNamedQuery("Producto.findAll");
         return query.getResultList();
     }
 
     public  Producto agregarProducto(Producto producto){
+        Proveedor proveedor = proveedorServicios.buscarProveedor(producto.getProveedor().getIdProveedor());
+        producto.setProveedor(proveedor);
         entityManager.persist(producto);
         return producto;
     }
@@ -40,12 +49,16 @@ public class ProductoServicios {
     }
 
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public  Producto buscarProducto(Integer productoId){
         Producto producto = entityManager.find(Producto.class, productoId);
         return producto;
     }
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Producto modificarProducto(Producto producto){
+        Proveedor proveedor = proveedorServicios.buscarProveedor(producto.getProveedor().getIdProveedor());
+        producto.setProveedor(proveedor);
         return entityManager.merge(producto);
     }
 }

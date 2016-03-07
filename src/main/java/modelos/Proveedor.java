@@ -94,13 +94,5 @@ public class Proveedor implements Serializable {
         this.direccion = direccion;
     }
 
-    @Override
-    public String toString() {
-        return "Proveedor{" +
-                "id=" + idProveedor +
-                ", nombre='" + nombre + '\'' +
-                ", telefono='" + telefono + '\'' +
-                ", direccion='" + direccion + '\'' +
-                '}';
-    }
+
 }
