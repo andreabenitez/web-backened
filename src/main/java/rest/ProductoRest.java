@@ -1,10 +1,9 @@
 package rest;
 
-import modelos.Cliente;
 import modelos.Producto;
-import servicios.ClienteServicios;
 import servicios.ProductoServicios;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -16,19 +15,21 @@ import java.util.List;
 @Path("/productos")
 public class ProductoRest {
 
+    @Inject
+    private ProductoServicios productoServicios;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Producto> listarProductos() {
-        return ProductoServicios.getProductos();
+        return productoServicios.getProductos();
     }
 
 
     @POST
     @Consumes("application/json")
     public Producto crearProducto(Producto producto) {
-        ProductoServicios.agregarProducto(producto);
-        return producto;
+        return productoServicios.agregarProducto(producto);
+
     }
 
 
@@ -36,7 +37,7 @@ public class ProductoRest {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public Producto buscarProducto(@PathParam("id") Integer id) {
-        return ProductoServicios.buscarProducto(id);
+        return productoServicios.buscarProducto(id);
     }
 
 
@@ -44,15 +45,14 @@ public class ProductoRest {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Producto modificarProducto(Producto productoModificado) {
-        ProductoServicios.modificarProducto(productoModificado);
-        return productoModificado;
+        return productoServicios.modificarProducto(productoModificado);
     }
 
 
     @DELETE
     @Path("{id}")
     public Response eliminarProducto(@PathParam("id") Integer id) {
-        ProductoServicios.eliminarProducto(id);
+        productoServicios.eliminarProducto(id);
         return Response.status(200).build();
     }
 }

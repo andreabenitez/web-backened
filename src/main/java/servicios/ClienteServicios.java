@@ -2,45 +2,55 @@ package servicios;
 
 import modelos.Cliente;
 
+import javax.annotation.ManagedBean;
+import javax.ejb.EJB;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by andrea on 29/02/16.
  */
+
+@Stateless
+@LocalBean
 public class ClienteServicios {
 
-    private static HashMap<Integer, Cliente> clientes = new HashMap<>();
-    private static int id =0;
+    @PersistenceContext(unitName = "persistenciaApp")
+    private EntityManager entityManager;
 
-
-    public static List<Cliente> getClientes() {
-        if (clientes.size() == 0){
-            clientes.put(++id, new Cliente(id, "Benitez", "Andrea", "3969499", "andy.benitez09@gmail.com" ));
-            clientes.put(++id, new Cliente(id, "Quinonez", "Franciso", "3969500", "franqur17@gmail.com" ));
-            clientes.put(++id, new Cliente(id, "Laviosa", "Sonia", "3969501", "sonia.laviosa@gmail.com" ));
-        }
-        List<Cliente> clienteList = new ArrayList<Cliente>(clientes.values());
-        return clienteList;
+    public  List<Cliente> getClientes() {
+        Query query = entityManager.createNamedQuery("Cliente.findAll");
+        return query.getResultList();
     }
 
-    public static Cliente agregarCliente(Cliente cliente){
-        cliente.setId(++id);
-        clientes.put(id, cliente);
+    public  Cliente agregarCliente(Cliente cliente){
+        entityManager.persist(cliente);
         return cliente;
     }
 
-    public static void eliminarCliente(Integer clienteId){
-        clientes.remove(clienteId);
+    public String eliminarCliente(Integer clienteId){
+        Cliente client = entityManager.find(Cliente.class, clienteId);
+        if (null != client) {
+            entityManager.remove(client);
+            return "Cliente eliminado exitosamente";
+        }
+        return "El cliente que intenta eliminar no exite";
     }
 
 
-    public static Cliente buscarCliente(Integer clienteId){
-        return clientes.get(clienteId);
+    public  Cliente buscarCliente(Integer clienteId){
+        Cliente client = entityManager.find(Cliente.class, clienteId);
+        return client;
     }
 
-    public static void modificarCliente(Cliente cliente){
-        clientes.put(cliente.getId(), cliente);
+    public Cliente modificarCliente(Cliente cliente){
+        return entityManager.merge(cliente);
     }
 }

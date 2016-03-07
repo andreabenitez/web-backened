@@ -2,29 +2,56 @@ package modelos;
 
 import servicios.ProductoServicios;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
+
 /**
  * Created by andrea on 29/02/16.
  */
-public class VentaDetalle {
+@Entity
+@Table(name = "ventadetalle")
+@XmlRootElement
+@NamedQueries({
+        @NamedQuery(name = "VentaDetalle.findAll", query = "SELECT vd FROM VentaDetalle vd"),
+        @NamedQuery(name = "VentaDetalle.findById", query = "SELECT vd FROM VentaDetalle vd WHERE vd.idVentaDetalle = :id")
+})
+public class VentaDetalle implements Serializable{
 
-    private Integer id;
-    private Integer idProducto;
+    private static final long serialVersionUID = -8767407091704984773L;
+
+    @Id
+    @Column(name = "id_venta_detalle")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idVentaDetalle;
+
+    @ManyToOne
+    @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
+    private Producto producto;
+
+    @NotNull
+    @Column(name = "cantidad")
     private Integer cantidad;
 
-    public Integer getId() {
-        return id;
+    @ManyToOne
+    @JoinColumn(name = "id_venta", referencedColumnName = "id_venta")
+    private Venta venta;
+
+    public Integer getIdVentaDetalle() {
+        return idVentaDetalle;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdVentaDetalle(Integer idVentaDetalle) {
+        this.idVentaDetalle = idVentaDetalle;
     }
 
-    public Integer getIdProducto() {
-        return idProducto;
+    public Producto getProducto() {
+        return producto;
     }
 
-    public void setIdProducto(Integer idProducto) {
-        this.idProducto = idProducto;
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
     public Integer getCantidad() {
@@ -35,11 +62,15 @@ public class VentaDetalle {
         this.cantidad = cantidad;
     }
 
+    public void setVenta(Venta venta) {
+        this.venta = venta;
+    }
+
     @Override
     public String toString() {
         return "VentaDetalle{" +
-                "id=" + id +
-                ", idProducto=" + ProductoServicios.buscarProducto(idProducto) +
+                "idVentaDetalle=" + idVentaDetalle +
+                ", idProducto=" + producto +
                 ", cantidad=" + cantidad +
                 '}';
     }

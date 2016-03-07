@@ -3,6 +3,14 @@ package rest;
 import modelos.Cliente;
 import servicios.ClienteServicios;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -13,7 +21,9 @@ import java.util.List;
  */
 @Path("/clientes")
 public class ClienteRest {
-    
+
+    @Inject
+    private ClienteServicios clienteServicios;
 
     /**
      * Lista todos los clientes
@@ -22,7 +32,7 @@ public class ClienteRest {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Cliente> listarClientes() {
-        return ClienteServicios.getClientes();
+         return clienteServicios.getClientes();
     }
 
     /**
@@ -33,7 +43,7 @@ public class ClienteRest {
     @POST
     @Consumes("application/json")
     public Cliente crearCliente(Cliente cliente) {
-        ClienteServicios.agregarCliente(cliente);
+        clienteServicios.agregarCliente(cliente);
         return cliente;
     }
 
@@ -46,7 +56,7 @@ public class ClienteRest {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public Cliente buscarCliente(@PathParam("id") Integer id) {
-        return ClienteServicios.buscarCliente(id);
+        return clienteServicios.buscarCliente(id);
     }
 
     /**
@@ -58,8 +68,7 @@ public class ClienteRest {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Cliente modificarCliente(Cliente clienteModificado) {
-        ClienteServicios.modificarCliente(clienteModificado);
-        return clienteModificado;
+        return clienteServicios.modificarCliente(clienteModificado);
     }
 
     /**
@@ -70,7 +79,7 @@ public class ClienteRest {
     @DELETE
     @Path("{id}")
     public Response eliminarCliente(@PathParam("id") Integer id) {
-        ClienteServicios.eliminarCliente(id);
+        clienteServicios.eliminarCliente(id);
         return Response.status(200).build();
     }
 

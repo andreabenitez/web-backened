@@ -1,46 +1,51 @@
 package servicios;
 
+import modelos.Cliente;
 import modelos.Producto;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 /**
  * Created by andrea on 29/02/16.
  */
+@Stateless
+@LocalBean
 public class ProductoServicios {
 
-    private static HashMap<Integer, Producto> productos= new HashMap<>();
-    private static int id =0;
+    @PersistenceContext(unitName = "persistenciaApp")
+    private EntityManager entityManager;
 
-    public static List<Producto> getProductos() {
-
-        if(productos.size() == 0){
-            productos.put(++id, new Producto(id, "coca cola", 5, new Float(5000), "de medio litro", ProveedorServicios.buscarProveedor(1)));
-            productos.put(++id, new Producto(id, "pepsi cola", 5, new Float(5500), "de medio litro", ProveedorServicios.buscarProveedor(2)));
-            productos.put(++id, new Producto(id, "pulp cola", 5, new Float(4500), "de medio litro", ProveedorServicios.buscarProveedor(3)));
-        }
-        List<Producto> proveedorList = new ArrayList<Producto>(productos.values());
-        return proveedorList;
+    public  List<Producto> getProductos() {
+        Query query = entityManager.createNamedQuery("Producto.findAll");
+        return query.getResultList();
     }
 
-    public static Producto agregarProducto(Producto producto){
-        producto.setId(++id);
-        productos.put(id, producto);
+    public  Producto agregarProducto(Producto producto){
+        entityManager.persist(producto);
         return producto;
     }
 
-    public static void eliminarProducto(Integer productoId){
-        productos.remove(productoId);
+    public String eliminarProducto(Integer productoId){
+        Producto producto = entityManager.find(Producto.class, productoId);
+        if (null != producto) {
+            entityManager.remove(producto);
+            return "Producto eliminado exitosamente";
+        }
+        return "El Producto que intenta eliminar no exite";
     }
 
 
-    public static Producto buscarProducto(Integer proveedorId){
-        return productos.get(proveedorId);
+    public  Producto buscarProducto(Integer productoId){
+        Producto producto = entityManager.find(Producto.class, productoId);
+        return producto;
     }
 
-    public static void modificarProducto(Producto producto){
-        productos.put(producto.getId(), producto);
+    public Producto modificarProducto(Producto producto){
+        return entityManager.merge(producto);
     }
 }

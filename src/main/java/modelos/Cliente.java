@@ -5,47 +5,61 @@
  */
 package modelos;
 
+
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 /**
  * Created by andrea on 27/02/16.
  */
+@Entity
+@Table(name = "cliente")
 @XmlRootElement
+@NamedQueries({
+        @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c"),
+        @NamedQuery(name = "Cliente.findByApellidos", query = "SELECT c FROM Cliente c WHERE c.apellidos = :apellidos"),
+        @NamedQuery(name = "Cliente.findByCedula", query = "SELECT c FROM Cliente c WHERE c.cedula = :cedula"),
+        @NamedQuery(name = "Cliente.findByEmail", query = "SELECT c FROM Cliente c WHERE c.email = :email"),
+        @NamedQuery(name = "Cliente.findByNombre", query = "SELECT c FROM Cliente c WHERE c.nombre = :nombre"),
+        @NamedQuery(name = "Cliente.findById", query = "SELECT c FROM Cliente c WHERE c.idCliente = :id")})
 public class Cliente implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private Integer id;
+
+    private static final long serialVersionUID = 7053141853120409654L;
+
+    @Id
+    @Column(name = "id_cliente")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idCliente;
+
+    @NotNull
+    @Column(name = "nombre")
     private String nombre;
+
+    @NotNull
+    @Column(name = "apellidos")
     private String apellidos;
+
+    @NotNull
+    @Column(name = "cedula")
     private String cedula;
-    //@Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+
+    @Column(name = "email")
     private String email;
 
     public Cliente() {
     }
 
-    public Cliente(Integer id) {
-        this.id = id;
+
+
+    public Integer getIdCliente() {
+        return idCliente;
     }
 
-    public Cliente(Integer id, String apellidos, String nombre, String cedula,  String email) {
-        this.id = id;
-        this.apellidos = apellidos;
-        this.cedula = cedula;
-        this.nombre = nombre;
-        this.email = email;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdCliente(Integer idCliente) {
+        this.idCliente = idCliente;
     }
 
     public String getNombre() {
@@ -83,7 +97,7 @@ public class Cliente implements Serializable {
     @Override
     public String toString() {
         return "Cliente{" +
-                "id=" + id +
+                "id=" + idCliente +
                 ", nombre='" + nombre + '\'' +
                 ", apellidos='" + apellidos + '\'' +
                 ", cedula='" + cedula + '\'' +

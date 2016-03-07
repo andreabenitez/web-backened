@@ -2,6 +2,10 @@ package servicios;
 
 import modelos.*;
 
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.ws.rs.core.Response;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,53 +16,52 @@ import java.util.List;
 /**
  * Created by andrea on 29/02/16.
  */
+@Stateless
 public class VentaServicios {
 
-    private static HashMap<Integer, Venta> ventas = new HashMap<>();
+    @PersistenceContext(unitName = "persistenciaApp")
+    private EntityManager entityManager;
 
-    private static int idVenta =0;
-    private static int idDetalleVenta = 0;
+    @Inject
+    private ProductoServicios productoServicios;
 
-    public static List<Venta> getVentas() {
-        List<Venta> ventaList = new ArrayList<Venta>(ventas.values());
-        return ventaList;
+    public List<Venta> getVentas() {
+        return entityManager.createNamedQuery("Venta.findAll").getResultList();
     }
 
-    public static Response agregarVenta(Venta venta){
-        venta.setId(++idVenta);
-        Date date = new Date();
-        String dateString = new SimpleDateFormat("yyyy-MM-dd").format(date);
+    public Response agregarVenta(Venta venta){
+
+        String dateString = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         venta.setDate(dateString);
         Float total = new Float(0.0);
         List<Producto> productoModificadoList = new ArrayList<>();
 
         for(VentaDetalle ventaDetalle : venta.getVentaDetalles()){
-            Producto producto = ProductoServicios.buscarProducto(ventaDetalle.getIdProducto());
+            Producto producto = productoServicios.buscarProducto(ventaDetalle.getProducto().getIdProducto());
             if(!(producto.getCantidad() >= ventaDetalle.getCantidad())) {
                 return Response.status(500).entity("Insuficiencia en stock del producto :" + producto.toString()).build();
             }
         }
 
         for(VentaDetalle ventaDetalle : venta.getVentaDetalles()){
-            ventaDetalle.setId(++idDetalleVenta);
-            Producto producto = ProductoServicios.buscarProducto(ventaDetalle.getIdProducto());
+            Producto producto = productoServicios.buscarProducto(ventaDetalle.getProducto().getIdProducto());
             producto.setCantidad(producto.getCantidad() - ventaDetalle.getCantidad());
-            ProductoServicios.modificarProducto(producto);
+            productoServicios.modificarProducto(producto);
             total = total + (producto.getPrecioUnitario() * ventaDetalle.getCantidad())* new Float(1.1);
         }
 
 
         venta.setTotal(total);
         venta.setSaldoDeuda(total);
-        ventas.put(idVenta, venta);
+        entityManager.persist(venta);
         return Response.status(200).entity(venta.toString()).build();
     }
 
-    public static void modificarVenta(Venta venta){
-        ventas.put(venta.getId(), venta);
+    public Venta modificarVenta(Venta venta){
+        return entityManager.merge(venta);
     }
 
-    public static Venta buscarVentaPorId (Integer idVenta){
-        return ventas.get(idVenta);
+    public Venta buscarVentaPorId (Integer idVenta){
+        return entityManager.find(Venta.class,idVenta);
     }
 }

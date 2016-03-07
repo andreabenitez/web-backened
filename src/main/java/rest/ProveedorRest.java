@@ -3,6 +3,7 @@ package rest;
 import modelos.Proveedor;
 import servicios.ProveedorServicios;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -14,6 +15,9 @@ import java.util.List;
 @Path("/proveedores")
 public class ProveedorRest {
 
+    @Inject
+    private ProveedorServicios proveedorServicios;
+
     /**
      *
      * @return
@@ -21,7 +25,7 @@ public class ProveedorRest {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Proveedor> listarClientes() {
-        return ProveedorServicios.getProveedores();
+        return proveedorServicios.getProveedores();
     }
 
     /**
@@ -32,8 +36,8 @@ public class ProveedorRest {
     @POST
     @Consumes("application/json")
     public Proveedor crearProveedor(Proveedor proveedor) {
-        ProveedorServicios.agregarProveedor(proveedor);
-        return proveedor;
+        return proveedorServicios.agregarProveedor(proveedor);
+
     }
 
     /**
@@ -45,7 +49,7 @@ public class ProveedorRest {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public Proveedor buscarProveedor(@PathParam("id") Integer id) {
-        return ProveedorServicios.buscarProveedor(id);
+        return proveedorServicios.buscarProveedor(id);
     }
 
     /**
@@ -57,8 +61,8 @@ public class ProveedorRest {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Proveedor modificarProveedor(Proveedor proveedorModificado) {
-        ProveedorServicios.modificarProveedor(proveedorModificado);
-        return proveedorModificado;
+        return proveedorServicios.modificarProveedor(proveedorModificado);
+
     }
 
     /**
@@ -69,7 +73,7 @@ public class ProveedorRest {
     @DELETE
     @Path("{id}")
     public Response eliminarProveedor(@PathParam("id") Integer id) {
-        ProveedorServicios.eliminarProveedor(id);
+        proveedorServicios.eliminarProveedor(id);
         return Response.status(200).build();
     }
 

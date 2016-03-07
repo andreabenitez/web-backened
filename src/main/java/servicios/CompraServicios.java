@@ -7,6 +7,10 @@ import modelos.Compra;
 import modelos.CompraDetalle;
 import modelos.Producto;
 
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.core.Response;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,42 +23,43 @@ import java.util.List;
  */
 public class CompraServicios {
 
-    private static HashMap<Integer, Compra> compras = new HashMap<>();
+    @PersistenceContext(unitName = "persistenciaApp")
+    private EntityManager entityManager;
 
-    private static int idCompra =0;
-    private static int idDetalleCompra = 0;
+    @Inject
+    private ProductoServicios productoServicios;
 
-    public static List<Compra> getCompras() {
-        List<Compra> compraList = new ArrayList<Compra>(compras.values());
-        return compraList;
+    public  List<Compra> getCompras() {
+        return entityManager.createNamedQuery("Cliente.findAll").getResultList();
     }
 
-    public static Response agregarCompra(Compra compra){
-        Date date = new Date();
-        String dateString = new SimpleDateFormat("yyyy-MM-dd").format(date);
+
+    public  Response agregarCompra(Compra compra){
+
+        String dateString = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         compra.setDate(dateString);
-        compra.setId(++idCompra);
         Float total = new Float(0.0);
 
 
         for (CompraDetalle compraDetalle : compra.getCompraDetalles()){
-            Producto producto = ProductoServicios.buscarProducto(compraDetalle.getIdProducto());
-            if(!(producto.getProveedor().getId().equals(compra.getProveedor().getId()))) {
+            Producto producto = productoServicios.buscarProducto(compraDetalle.getProducto().getIdProducto());
+            if(!(producto.getProveedor().getIdProveedor().equals(compra.getProveedor().getIdProveedor()))) {
                 return Response.status(500).entity("El producto" + producto.toString() + "no pertenece al proveedor seleccionado: " + compra.getProveedor().toString() + "\nNo se pudo realizar la compra").build() ;
             }
         }
 
         for (CompraDetalle compraDetalle : compra.getCompraDetalles()){
-            compraDetalle.setId(++idDetalleCompra);
-            Producto producto = ProductoServicios.buscarProducto(compraDetalle.getIdProducto());
+
+            Producto producto = productoServicios.buscarProducto(compraDetalle.getProducto().getIdProducto());
             producto.setCantidad(producto.getCantidad() + compraDetalle.getCantidad());
-            ProductoServicios.modificarProducto(producto);
+            productoServicios.modificarProducto(producto);
             total = total + ((producto.getPrecioUnitario() * compraDetalle.getCantidad()));
         }
 
         compra.setTotal(total);
-        compras.put(idCompra, compra);
+        entityManager.persist(compra);
         return Response.status(200).entity(compra.toString()).build();
     }
+
 
 }

@@ -1,4 +1,4 @@
-/*
+package config;/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -26,8 +26,19 @@ import java.util.Set;
 @ApplicationPath("/rest")
 public class ApplicationConfig extends Application {
 
-    public Set<Class<?>> getClasses() {
-        return new HashSet<Class<?>>(Arrays.asList(ClienteRest.class,
-                ProveedorRest.class, ProductoRest.class, CompraRest.class, VentaRest.class, PagoRest.class));
+    /*private Set<Class<?>> resources = new HashSet<Class<?>>();
+
+    public config.ApplicationConfig(){
+        resources.add(ClienteRest.class);
+        *//*resources.add(ProductoRest.class);
+        resources.add(ProveedorRest.class);
+        resources.add(VentaRest.class);
+        resources.add(CompraRest.class);
+        resources.add(PagoRest.class);*//*
     }
+
+    @Override
+    public Set<Class<?>> getClasses() {
+        return resources;
+    }*/
 }

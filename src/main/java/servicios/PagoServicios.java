@@ -5,44 +5,46 @@ import modelos.Venta;
 
 import java.text.SimpleDateFormat;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.ws.rs.core.Response;
 
-
+@Stateless
 public class PagoServicios {
 
-    private static int idPago = 0;
-    private static HashMap<Integer, Pago> pagos = new HashMap<Integer, Pago>();
+    @Inject
+    private VentaServicios ventaServicios;
 
-    public static List<Pago> getPagos() {
-        List<Pago> pagoList = new ArrayList<Pago>(pagos.values());
-        return pagoList;
+    @PersistenceContext(unitName = "persistenciaApp")
+    private EntityManager entityManager;
+
+    public List<Pago> getPagos() {
+        return entityManager.createNamedQuery("Pago.findAll").getResultList();
     }
 
-    public static Response agregarPago(Pago pago) {
-        Venta venta = VentaServicios.buscarVentaPorId(pago.getVentaId());
+    public Response agregarPago(Pago pago) {
+        Venta venta = ventaServicios.buscarVentaPorId(pago.getVenta().getIdVenta());
         if (venta.getSaldoDeuda() > 0) {
             String mensajeRespuesta;
-            pago.setId(++idPago);
-            Date date = new Date();
 
-            String dateString = new SimpleDateFormat("yyyy-MM-dd").format(date);
+            String dateString = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             pago.setFecha(dateString);
             if (venta.getSaldoDeuda() > pago.getMontoPagado()) {
                 venta.setSaldoDeuda(venta.getSaldoDeuda() - pago.getMontoPagado());
                 mensajeRespuesta = "El cliente aun debe abonar " + (venta.getTotal() - pago.getMontoPagado()) + "para pagar completar el pago de la venta: \n" + venta.toString();
-                VentaServicios.modificarVenta(venta);
+                ventaServicios.modificarVenta(venta);
             } else {
                 mensajeRespuesta = "La deuda por la Venta:" + venta.toString() + "ha sido totalmente pagada";
                 venta.setSaldoDeuda((float) 0);
-                VentaServicios.modificarVenta(venta);
+                ventaServicios.modificarVenta(venta);
             }
 
-            pagos.put(idPago, pago);
+            entityManager.persist(pago);
 
             return Response.status(200).entity(pago.toString() + mensajeRespuesta).build();
         }

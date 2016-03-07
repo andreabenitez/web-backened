@@ -5,6 +5,8 @@
  */
 package modelos;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
@@ -12,39 +14,60 @@ import java.io.Serializable;
 /**
  * Created by andrea on 27/02/16.
  */
+@Entity
+@Table(name = "proveedor")
+@XmlRootElement
+@NamedQueries({
+        @NamedQuery(name = "Proveedor.findAll", query = "SELECT p FROM Proveedor p"),
+        @NamedQuery(name = "Proveedor.findById", query = "SELECT p FROM Proveedor p WHERE p.idProveedor = :idProveedor")
+})
 public class Proveedor implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private Integer id;
+
+    private static final long serialVersionUID = 7032183068501280419L;
+
+    @Id
+    @Column(name = "id_proveedor")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idProveedor;
+
+    @NotNull
+    @Column(name = "nombre")
     private String nombre;
+
+    @NotNull
+    @Column(name = "telefono")
     private String telefono;
+
+    @NotNull
+    @Column(name = "direccion")
     private String direccion;
 
 
     public Proveedor() {
     }
 
-    public Proveedor(Integer id, String nombre, String telefono, String direccion){
-        this.id = id;
+    public Proveedor(Integer idProveedor, String nombre, String telefono, String direccion){
+        this.idProveedor = idProveedor;
         this.nombre = nombre;
         this.telefono = telefono;
         this.direccion = direccion;
     }
 
-    public Proveedor(Integer id) {
-        this.id = id;
+    public Proveedor(Integer idProveedor) {
+        this.idProveedor = idProveedor;
     }
 
-    public Proveedor(Integer id, String nombre) {
-        this.id = id;
+    public Proveedor(Integer idProveedor, String nombre) {
+        this.idProveedor = idProveedor;
         this.nombre = nombre;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getIdProveedor() {
+        return idProveedor;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdProveedor(Integer id) {
+        this.idProveedor = id;
     }
 
     public String getNombre() {
@@ -74,7 +97,7 @@ public class Proveedor implements Serializable {
     @Override
     public String toString() {
         return "Proveedor{" +
-                "id=" + id +
+                "id=" + idProveedor +
                 ", nombre='" + nombre + '\'' +
                 ", telefono='" + telefono + '\'' +
                 ", direccion='" + direccion + '\'' +
