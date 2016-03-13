@@ -4,14 +4,12 @@ import modelos.Cliente;
 import modelos.Producto;
 import modelos.Proveedor;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.ejb.*;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
@@ -32,11 +30,18 @@ public class ProductoServicios {
         return query.getResultList();
     }
 
-    public  Producto agregarProducto(Producto producto){
-        Proveedor proveedor = proveedorServicios.buscarProveedor(producto.getProveedor().getIdProveedor());
-        producto.setProveedor(proveedor);
-        entityManager.persist(producto);
-        return producto;
+    public  Response agregarProducto(Producto producto) throws Exception{
+        try {
+            Proveedor proveedor = proveedorServicios.buscarProveedor(producto.getProveedor().getIdProveedor());
+            producto.setProveedor(proveedor);
+            entityManager.persist(producto);
+            return Response.status(200).entity("La insercion fue realizada exitosamente").build();
+
+        }catch (Exception e){
+            return Response.status(500).entity("Ha ocurrido un error durante el proceso: " + e.getMessage()).build();
+
+        }
+
     }
 
     public String eliminarProducto(Integer productoId){

@@ -27,7 +27,7 @@ public class ProductoRest {
 
     @POST
     @Consumes("application/json")
-    public Producto crearProducto(Producto producto) {
+    public Response crearProducto(Producto producto) throws Exception {
         return productoServicios.agregarProducto(producto);
 
     }
