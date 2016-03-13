@@ -1,8 +1,10 @@
 package servicios;
 
+import excepciones.TamanoPaginaExcepcion;
 import modelos.Cliente;
 import modelos.Producto;
 import modelos.Proveedor;
+import paginacion.Paginacion;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -27,9 +29,18 @@ public class ProductoServicios {
     @Inject
     private ProveedorServicios proveedorServicios;
 
-    public  List<Producto> getProductos() {
-        Query query = entityManager.createNamedQuery("Producto.findAll");
-        return query.getResultList();
+    public  List<Producto> getProductos(Paginacion paginacion) throws TamanoPaginaExcepcion {
+        if (paginacion.getTamanoPagina() > 100){
+            throw new TamanoPaginaExcepcion("El servicio no permite responder a solicitudes mayores a 100");
+        }
+        else {
+            int primerRegistro = (paginacion.getTamanoPagina() * (paginacion.getNumeroPagina() - 1));
+            Query query = entityManager.createNamedQuery("Producto.findAll");
+            return query
+                    .setFirstResult(primerRegistro)
+                    .setMaxResults(paginacion.getTamanoPagina())
+                    .getResultList();
+        }
     }
 
     public  Producto agregarProducto(Producto producto){
