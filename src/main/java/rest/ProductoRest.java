@@ -1,14 +1,17 @@
 package rest;
 
+import excepciones.TamanoPaginaExcepcion;
 import modelos.Producto;
 import modelos.ProductoDuplicado;
 import servicios.ProductoDuplicadoServicios;
+import paginacion.Paginacion;
 import servicios.ProductoServicios;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,10 +26,12 @@ public class ProductoRest {
     @Inject
     private ProductoDuplicadoServicios productoDuplicadoServicios;
 
-    @GET
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Producto> listarProductos() {
-        return productoServicios.getProductos();
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/paginado")
+    public List<Producto> listarProductos(Paginacion paginacion) throws TamanoPaginaExcepcion{
+        return productoServicios.getProductos(paginacion);
     }
 
     @GET

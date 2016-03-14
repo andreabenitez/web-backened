@@ -1,9 +1,11 @@
 package servicios;
 
 import modelos.Cliente;
+import excepciones.TamanoPaginaExcepcion;
 import modelos.Producto;
 import modelos.ProductoDuplicado;
 import modelos.Proveedor;
+import paginacion.Paginacion;
 
 import javax.ejb.*;
 import javax.inject.Inject;
@@ -35,11 +37,20 @@ public class ProductoServicios {
     @Inject
     private ProductoDuplicadoServicios productoDuplicadoServicios;
 
-
-    public List<Producto> getProductos() {
-        Query query = entityManager.createNamedQuery("Producto.findAll");
-        return query.getResultList();
+    public  List<Producto> getProductos(Paginacion paginacion) throws TamanoPaginaExcepcion {
+        if (paginacion.getTamanoPagina() > 100){
+            throw new TamanoPaginaExcepcion("El servicio no permite responder a solicitudes mayores a 100");
+        }
+        else {
+            int primerRegistro = (paginacion.getTamanoPagina() * (paginacion.getNumeroPagina() - 1));
+            Query query = entityManager.createNamedQuery("Producto.findAll");
+            return query
+                    .setFirstResult(primerRegistro)
+                    .setMaxResults(paginacion.getTamanoPagina())
+                    .getResultList();
+        }
     }
+
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Response agregarProducto(Producto producto) throws Exception {
