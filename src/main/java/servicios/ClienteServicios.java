@@ -19,7 +19,6 @@ import java.util.logging.Logger;
  */
 
 @Stateless
-@LocalBean
 public class ClienteServicios {
 
     @PersistenceContext(unitName = "persistenciaApp")

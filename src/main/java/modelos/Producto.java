@@ -19,6 +19,7 @@ import java.io.Serializable;
 @XmlRootElement
 @NamedQueries({
         @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p"),
+        @NamedQuery(name = "Producto.findByNombre", query = "SELECT p FROM Producto p WHERE p.nombre = :nombre"),
         @NamedQuery(name = "Producto.findById", query = "SELECT p FROM Producto p WHERE p.idProducto = :id")
 })
 public class Producto implements Serializable {

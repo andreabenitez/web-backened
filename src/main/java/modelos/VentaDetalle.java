@@ -1,5 +1,6 @@
 package modelos;
 
+import org.hibernate.annotations.Check;
 import servicios.ProductoServicios;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ import java.io.Serializable;
         @NamedQuery(name = "VentaDetalle.findAll", query = "SELECT vd FROM VentaDetalle vd"),
         @NamedQuery(name = "VentaDetalle.findById", query = "SELECT vd FROM VentaDetalle vd WHERE vd.idVentaDetalle = :id")
 })
+@Check(constraints = "cantidad > 0")
 public class VentaDetalle implements Serializable{
 
     private static final long serialVersionUID = -8767407091704984773L;

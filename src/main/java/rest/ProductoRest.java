@@ -1,6 +1,8 @@
 package rest;
 
 import modelos.Producto;
+import modelos.ProductoDuplicado;
+import servicios.ProductoDuplicadoServicios;
 import servicios.ProductoServicios;
 
 import javax.inject.Inject;
@@ -18,12 +20,22 @@ public class ProductoRest {
     @Inject
     private ProductoServicios productoServicios;
 
+    @Inject
+    private ProductoDuplicadoServicios productoDuplicadoServicios;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Producto> listarProductos() {
         return productoServicios.getProductos();
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/duplicados")
+    public List<ProductoDuplicado> listarProductosDuplicados(){
+        return productoDuplicadoServicios.getProductosDuplicados();
+
+    }
 
     @POST
     @Consumes("application/json")
@@ -32,6 +44,14 @@ public class ProductoRest {
 
     }
 
+    @POST
+    @Consumes("application/json")
+    @Path("/insertalista")
+    public Response insertarListaDeProductos(List<Producto> producto)throws Exception{
+
+        productoDuplicadoServicios.agregarListaDeProductos(producto);
+        return Response.status(200).build();
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
