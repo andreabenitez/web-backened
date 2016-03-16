@@ -1,5 +1,6 @@
 package servicios;
 
+import excepciones.NoExisteProductoException;
 import excepciones.ValidarExistenciaDetalle;
 import excepciones.ValidarExistenciaStockException;
 import modelos.*;
@@ -69,14 +70,17 @@ public class VentaServicios {
 
         } catch (Exception e) {
             String errorMessage = "La venta no se pudo realizar: ";
-            if (e instanceof ValidarExistenciaStockException ||
+            if (e instanceof ValidarExistenciaStockException  ||
                     e instanceof ValidarExistenciaDetalle){
                 errorMessage += e.getMessage();
             }
-            else if (e.getCause() instanceof ConstraintViolationException){
+            else if (e.getCause() instanceof ConstraintViolationException ){
                 context.setRollbackOnly();
                 errorMessage = e.getCause().getMessage();
 
+            }
+            else if(e instanceof NoExisteProductoException){
+                errorMessage += e.getMessage();
             }
 
             return Response.status(500).entity(errorMessage).build();
@@ -92,7 +96,7 @@ public class VentaServicios {
         return entityManager.find(Venta.class, idVenta);
     }
 
-    private boolean validarExistenciaStock(Venta venta) throws ValidarExistenciaStockException {
+    private boolean validarExistenciaStock(Venta venta) throws ValidarExistenciaStockException, NoExisteProductoException {
         for (VentaDetalle ventaDetalle : venta.getVentaDetalles()) {
             Producto producto = productoServicios.buscarProducto(ventaDetalle.getProducto().getIdProducto());
             if (!(producto.getCantidad() >= ventaDetalle.getCantidad())) {

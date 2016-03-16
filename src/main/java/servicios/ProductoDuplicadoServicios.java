@@ -32,7 +32,7 @@ public class ProductoDuplicadoServicios {
     }
 
     public List<ProductoDuplicado> getProductosDuplicados() {
-        Query query = entityManager.createQuery("ProductoDuplicado.findAll");
+        Query query = entityManager.createNamedQuery("ProductoDuplicado.findAll");
         return query.getResultList();
 
     }

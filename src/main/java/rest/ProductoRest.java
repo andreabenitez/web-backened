@@ -1,5 +1,7 @@
 package rest;
 
+import excepciones.NoExisteProductoException;
+import excepciones.NoExisteProveedorException;
 import excepciones.TamanoPaginaExcepcion;
 import modelos.Producto;
 import modelos.ProductoDuplicado;
@@ -61,7 +63,7 @@ public class ProductoRest {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public Producto buscarProducto(@PathParam("id") Integer id) {
+    public Producto buscarProducto(@PathParam("id") Integer id) throws NoExisteProductoException {
         return productoServicios.buscarProducto(id);
     }
 
@@ -69,7 +71,7 @@ public class ProductoRest {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Producto modificarProducto(Producto productoModificado) {
+    public Producto modificarProducto(Producto productoModificado) throws NoExisteProveedorException {
         return productoServicios.modificarProducto(productoModificado);
     }
 

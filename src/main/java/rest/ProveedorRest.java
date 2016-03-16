@@ -1,5 +1,6 @@
 package rest;
 
+import excepciones.NoExisteProveedorException;
 import modelos.Proveedor;
 import servicios.ProveedorServicios;
 
@@ -48,7 +49,7 @@ public class ProveedorRest {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public Proveedor buscarProveedor(@PathParam("id") Integer id) {
+    public Proveedor buscarProveedor(@PathParam("id") Integer id) throws NoExisteProveedorException {
         return proveedorServicios.buscarProveedor(id);
     }
 

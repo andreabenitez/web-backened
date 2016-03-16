@@ -1,6 +1,7 @@
 package servicios;
 
 
+import excepciones.NoExisteProveedorException;
 import modelos.Producto;
 import modelos.Proveedor;
 
@@ -41,8 +42,13 @@ public class ProveedorServicios {
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public  Proveedor buscarProveedor(Integer proveedorId){
-        return entityManager.find(Proveedor.class, proveedorId);
+    public  Proveedor buscarProveedor(Integer proveedorId) throws NoExisteProveedorException {
+        Proveedor proveedor = entityManager.find(Proveedor.class, proveedorId);
+        if (proveedor == null){
+            throw new NoExisteProveedorException("No existe proveedor con id:" + proveedorId);
+        }else{
+            return proveedor;
+        }
     }
 
     public Proveedor modificarProveedor(Proveedor proveedor){

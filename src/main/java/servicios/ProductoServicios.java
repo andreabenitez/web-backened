@@ -1,10 +1,13 @@
 package servicios;
 
+import excepciones.NoExisteProductoException;
+import excepciones.NoExisteProveedorException;
 import modelos.Cliente;
 import excepciones.TamanoPaginaExcepcion;
 import modelos.Producto;
 import modelos.ProductoDuplicado;
 import modelos.Proveedor;
+import org.hibernate.exception.ConstraintViolationException;
 import paginacion.Paginacion;
 
 import javax.ejb.*;
@@ -61,9 +64,16 @@ public class ProductoServicios {
             return Response.status(200).entity("La insercion fue realizada exitosamente").build();
 
         } catch (Exception e) {
-            Producto p = productoServicios.buscarProductoPorNombre(producto);
-            productoDuplicadoServicios.agregarProductoDuplicado(p);
-            return Response.status(500).entity("Ha ocurrido un error durante el proceso: " + e.getMessage()).build();
+            String errorMessage = "Ha ocurrido un error durante el proceso: ";
+            if (e instanceof NoExisteProveedorException){
+                errorMessage += e.getMessage();
+            }
+            else if (e.getCause() instanceof ConstraintViolationException) {
+                Producto p = productoServicios.buscarProductoPorNombre(producto);
+                productoDuplicadoServicios.agregarProductoDuplicado(p);
+                errorMessage += e.getCause().getMessage();
+            }
+            return Response.status(500).entity(errorMessage).build();
 
         }
     }
@@ -89,13 +99,18 @@ public class ProductoServicios {
 
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Producto buscarProducto(Integer productoId) {
+    public Producto buscarProducto(Integer productoId) throws NoExisteProductoException {
         Producto producto = entityManager.find(Producto.class, productoId);
-        return producto;
+        if (producto == null){
+            throw new NoExisteProductoException("El producto con el id: " + productoId + " no existe");
+        }
+        else {
+            return producto;
+        }
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Producto modificarProducto(Producto producto) {
+    public Producto modificarProducto(Producto producto) throws NoExisteProveedorException {
         Proveedor proveedor = proveedorServicios.buscarProveedor(producto.getProveedor().getIdProveedor());
         producto.setProveedor(proveedor);
         return entityManager.merge(producto);
